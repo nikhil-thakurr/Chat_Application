@@ -18,7 +18,23 @@ io.on("connection",(socket)=>{
 
     socket.on("chat",(message)=>{
         console.log("The message is : ",message)
+
+        io.emit('chat message', message);
+   
+
     })
+
+    socket.on("user",(name)=>{
+        console.log(name ," has Joined")
+        socket.data.name = name; 
+        io.emit("user",name);
+    })
+
+    socket.on("disconnect", () => {
+        const name = socket.data.name || "A user";
+        console.log(`${name} has left`);
+        io.emit("userLeft", `${name} has left`); // Notify all clients
+    });
 })
 
 
